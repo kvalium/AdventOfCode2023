@@ -39,10 +39,27 @@ def part_one(lines)
   puts "Total points: #{total_points}"
 end
 
+def part_two(lines)
+  cards_counter = {}
+  lines.each do |line|
+    t = ticket(line)
+    card_number = t[:card_number]
+    nb_matching_numbers = t[:nb_matching_numbers]
+    cards_counter[card_number] = cards_counter[card_number] ? cards_counter[card_number] + 1 : 1
+    (1..cards_counter[card_number]).each do |_|
+      (1..nb_matching_numbers).each do |i|
+        cards_counter[card_number + i] = cards_counter[card_number + i] ? cards_counter[card_number + i] + 1 : 1
+      end
+    end
+  end
+  puts "total scratchcards: #{cards_counter.values.sum}"
+end
+
 Benchmark.bm do |x|
   x.report do
     lines = ARGF.read.lines.map(&:chomp)
 
     part_one(lines)
+    part_two(lines)
   end
 end
