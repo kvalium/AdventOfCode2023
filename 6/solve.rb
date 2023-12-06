@@ -12,8 +12,12 @@ def race_times(race_time, best_distance)
   end
 end
 
+def times_and_records(lines)
+  lines.map { _1.scan(/\d+/).map(&:to_i) }
+end
+
 def races(lines)
-  times, records = lines.map { _1.scan(/\d+/).map(&:to_i) }
+  times, records = times_and_records(lines)
   times.zip(records)
 end
 
@@ -23,10 +27,16 @@ def part_one(races)
   end
 end
 
+def part_two(lines)
+  final_race = times_and_records(lines).map(&:join).map(&:to_i)
+  part_one([final_race])
+end
+
 Benchmark.bm do |x|
   x.report do
     lines = ARGF.read.lines.map(&:chomp)
     races = races(lines)
     puts "part one - #{part_one(races)}"
+    puts "part two - #{part_two(lines)}"
   end
 end
